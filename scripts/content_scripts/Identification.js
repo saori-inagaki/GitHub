@@ -11,7 +11,15 @@ if ($('.btn-success').text()) {
 
   const unvisibleBox_emails = [
     'megumi.sawasato@op.adish.co.jp',
-    'ryo.sato@op.adish.co.jp'
+    'ryo.sato@op.adish.co.jp',
+    'miki.ito@op.adish.co.jp',
+    'mayu.yoshida@op.adish.co.jp',
+    'yuu.sasaki@op.adish.co.jp',
+    'asuka.washio@op.adish.co.jp',
+    'yui.takahashi@op.adish.co.jp',
+    'kanae.chida@op.adish.co.jp',
+    'moe.takahashi@op.adish.co.jp',
+    'saori.inagaki@op.adish.co.jp'
   ];
 
   const user_email = getEmail();
@@ -19,7 +27,9 @@ if ($('.btn-success').text()) {
   // メールアドレスが配列内に存在するかをチェック
   if (unvisibleBox_emails.includes(user_email)) {
     // 一致した場合の処理
-    console.log('メールアドレス一致：ボックス非表示');
+    console.log('メールアドレス一致：チェックボックス表示切り替えを実行');
+    implementCheckBoxToggle(); // ここでチェックボックス表示切り替えを実行
+    displayCheckBox(); // 一致する場合でもボックスを表示
   } else {
     // 一致しない場合の処理
     console.log('メールアドレス不一致：ボックス表示');
@@ -38,6 +48,83 @@ function getEmail() {
   console.log(user_email);
   return user_email;
 }
+
+
+
+
+
+
+
+
+function implementCheckBoxToggle() {
+  // チェックボックスの初期状態をlocalStorageから取得
+  var isChecked = localStorage.getItem('checkboxChecked') === 'true';
+
+  // スタイルを動的に追加し、margin-rightを30pxに設定する
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .extra-space {
+      position: relative;
+      padding: 15px;
+      display: block;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: #777777;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // 新しい要素を作成し、チェックボックスとテキストを挿入する
+  const newElement = '<li><span class="extra-space"><label for="toggle-checkbox"><input type="checkbox" id="toggle-checkbox"> <span style="font-weight: normal;">チェックボックス表示切り替え</span></label></span></li>';
+  $('.nav.navbar-nav.navbar-right').prepend(newElement);
+
+  // ローカルストレージの状態を反映
+  $('#toggle-checkbox').prop('checked', isChecked);
+
+  // 初期状態に応じて表示・非表示を設定
+  if (isChecked) {
+    $('div.adicheck').hide();
+    $('input.adicheck').prop('checked', true);
+    $('.btn-success').prop('disabled', false);
+    console.log("承認ボタンオン");
+  } else {
+    $('div.adicheck').show();
+  }
+
+  // ページロード時にチェックボックスの表示・非表示を設定
+  var isChecked = localStorage.getItem('checkboxChecked') === 'true';
+  if (isChecked) {
+    $('div.adicheck').hide();
+  } else {
+    $('div.adicheck').show();
+  }
+
+  // チェックボックスの状態が変化した時の処理
+  $('#toggle-checkbox').change(function () {
+    var isChecked = $(this).is(':checked');
+    localStorage.setItem('checkboxChecked', isChecked); // 状態をlocalStorageに保存
+
+    if (isChecked) {
+      $('div.adicheck').hide();
+      $('input.adicheck').prop('checked', true);
+      $('.btn-success').prop('disabled', false);
+      console.log("承認ボタンオン");
+    } else {
+      $('div.adicheck').show();
+      // ボックス内のチェックボックスをすべて外す
+      $('input.adicheck').prop('checked', false);
+      $('.btn-success').prop('disabled', true);
+      $('.btn-danger').prop('disabled', false);
+    }
+  });
+}
+
+
+
+
+
+
+
 
 
 
@@ -75,6 +162,7 @@ function displayCheckBox() {
     '性別は' + gender + 'であるか',
     '生年月日は一致しているか<br>　(' + birthday + ')'
   ];
+
 
 
   //チェック項目を出力する場所を作っておきます。
@@ -116,7 +204,7 @@ function displayCheckBox() {
 
   //出力する場所に対して、チェック項目を出力していきます。(同時にイベントも設定しておきます)
   for (var i in array) {
-    $('div.adicheck').append('<p><label><input type="checkbox" class="adicheck" id="adicheck' + i + '">' + array[i] + '</label></p>');
+    $('div.adicheck').append('<p><label><input type="checkbox" class="adicheck unhighlight" id="adicheck' + i + '">' + array[i] + '</label></p>');
     $(document).on('change', '#adicheck' + i, function () {
       // console.log($('input.adicheck:checked').length);
       if ($('input.adicheck:checked').length === array.length) {
@@ -192,11 +280,15 @@ function displayCheckBox() {
     chrome.storage.sync.get(["left", "top"], function (position) {
       $('div.adicheck').css(position);
     });
+
+    // ページロード時にチェックボックスの表示・非表示を設定
+    var isChecked = localStorage.getItem('checkboxChecked') === 'true';
+    if (isChecked) {
+      $('div.adicheck').hide();
+    } else {
+      $('div.adicheck').show();
+    }
   });
 
 
 }
-
-
-
-

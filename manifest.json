@@ -2,55 +2,80 @@
     "manifest_version": 3,
     "name": "IgnisAdmin",
     "description": "Ignis管理画面上の操作計測と業務支援ツールの追加を行います。",
-    "version": "2.2.5",
+    "version": "2.2.7",
     "icons": {
         "16": "icons/icon_32.png",
         "128": "icons/icon_32.png"
     },
-    "permissions": ["identity","storage"],
+    "permissions": [
+        "identity",
+        "storage",
+        "tabs",
+        "webNavigation"
+    ],
     "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi5SK0r1EjFtXgbbK8CdaD9xHdO0+WelgyNPxULIZQ1ihMkjBs6Lh2LHtxXrg7elN05wZjC8jJJnxCHV//6Cp/Hx7fBGwpKk3/J06OxI8YYXdxTGnIIKDF93zgGcmRiblBrTvqS6yTOcInE7ksdcVw2dj2DTY+3caJe0H1HXVvbf35w4tDSic2xQb6nW/xktAmf32lOWcqxNkLq+1+LmtEST8KxIiZb/wx81u3dqGmhkQ8AU/ATV288A5SMXUV4T4fmcCuR7trihroZwfSLiCcuXTS0ukd7c8ov4AenpwRouMYJRchN8PNpI1fxa9AsB/J4yQZLGvZW1CujzolOeJmQIDAQAB",
-
     "background": {
-      "service_worker": "scripts/background.js"
+        "service_worker": "scripts/background.js"
     },
-
     "host_permissions": [
         "https://log-event-v2-ob6mb2gjvq-an.a.run.app/",
         "https://get-admin-xpaths-v3-ob6mb2gjvq-an.a.run.app/",
         "https://log-queue-v3-ob6mb2gjvq-an.a.run.app/"
     ],
-
     "content_scripts": [
         {
-            "js": [ 
+            "js": [
                 "scripts/content_scripts/log.js",
                 "scripts/content_scripts/show_version.js",
                 "scripts/content_scripts/sla_alert.js"
             ],
-            "matches": ["https://ishtar.with.is/admin*"]
+            "matches": [
+                "https://ishtar.with.is/admin*"
+            ]
         },
         {
-            "js": [ "scripts/content_scripts/filter.js"],
-            "matches": ["https://ishtar.with.is/admin/review_queue_histories*"]
+            "js": [
+                "scripts/content_scripts/filter.js"
+            ],
+            "matches": [
+                "https://ishtar.with.is/admin/review_queue_histories*"
+            ]
         },
         {
-            "js": [ "scripts/content_scripts/highlight.js"],
-            "matches": ["https://ishtar.with.is/admin/reviews/*"]
+            "js": [
+                "scripts/content_scripts/highlight.js"
+            ],
+            "matches": [
+                "https://ishtar.with.is/admin/reviews/*"
+            ]
         },
         {
             "matches": [
-                "https://ishtar.with.is/admin/reviews/identification*"
+                "https://ishtar.with.is/admin/reviews/*"
             ],
             "js": [
                 "scripts/vendor/jquery-3.3.1.min.js",
                 "scripts/vendor/jquery-ui.min.js",
                 "scripts/content_scripts/Identification.js"
             ]
+        },
+        {
+            "js": [
+                "scripts/content_scripts/keyword_highlight.js"
+            ],
+            "matches": [
+                "https://ishtar.with.is/*"
+            ],
+            "css": [
+                "css/styles.css"
+            ]
         }
     ],
-
     "oauth2": {
         "client_id": "294885530739-m8e02a6qmt3s1iplg4k8bmn6opskfqhd.apps.googleusercontent.com",
-        "scopes": ["openid", "email"]
+        "scopes": [
+            "openid",
+            "email"
+        ]
     }
 }
